@@ -18,7 +18,12 @@ package org.jsonschema2pojo;
 
 import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JCodeModel;
-import java.io.ByteArrayOutputStream;
+import org.jsonschema2pojo.exception.GenerationException;
+import org.jsonschema2pojo.formatters.CodeModel;
+import org.jsonschema2pojo.formatters.SupportedLanguage;
+import org.jsonschema2pojo.formatters.swift.SwiftCodeModel;
+import org.jsonschema2pojo.rules.RuleFactory;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -26,25 +31,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
-
-import org.jsonschema2pojo.FileCodeWriterWithEncoding;
-import org.jsonschema2pojo.exception.GenerationException;
-import org.jsonschema2pojo.rules.RuleFactory;
 
 public class Jsonschema2Pojo {
     /**
      * Reads the contents of the given source and initiates schema generation.
-     * 
-     * @param config
-     *            the configuration options (including source and target paths,
-     *            and other behavioural options) that will control code
-     *            generation
-     * @throws FileNotFoundException
-     *             if the source path is not found
-     * @throws IOException
-     *             if the application is unable to read data from the source
+     * @param config the configuration options (including source and target paths,
+     *               and other behavioural options) that will control code
+     *               generation
+     * @throws FileNotFoundException if the source path is not found
+     * @throws IOException           if the application is unable to read data from the source
      */
     public static void generate(GenerationConfig config) throws FileNotFoundException, IOException {
         Annotator annotator = getAnnotator(config);
@@ -61,7 +59,7 @@ public class Jsonschema2Pojo {
             removeOldOutput(config.getTargetDirectory());
         }
 
-        for (Iterator<File> sources = config.getSource(); sources.hasNext();) {
+        for (Iterator<File> sources = config.getSource(); sources.hasNext(); ) {
             File source = sources.next();
 
             if (source.isDirectory()) {
@@ -74,7 +72,8 @@ public class Jsonschema2Pojo {
         if (config.getTargetDirectory().exists() || config.getTargetDirectory().mkdirs()) {
             CodeWriter sourcesWriter = new FileCodeWriterWithEncoding(config.getTargetDirectory(), config.getOutputEncoding());
             CodeWriter resourcesWriter = new FileCodeWriterWithEncoding(config.getTargetDirectory(), config.getOutputEncoding());
-            codeModel.build(sourcesWriter, resourcesWriter);
+            CodeModel customCodeModel = new SwiftCodeModel(codeModel, SupportedLanguage.SWIFT);
+            customCodeModel.build(sourcesWriter, resourcesWriter);
         } else {
             throw new GenerationException("Could not create or access target directory " + config.getTargetDirectory().getAbsolutePath());
         }
@@ -116,7 +115,7 @@ public class Jsonschema2Pojo {
         }
     }
 
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
     private static void delete(File f) {
         if (f.isDirectory()) {
             for (File child : f.listFiles()) {

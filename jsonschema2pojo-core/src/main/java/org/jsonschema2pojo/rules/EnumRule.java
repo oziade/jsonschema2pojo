@@ -16,23 +16,6 @@
 
 package org.jsonschema2pojo.rules;
 
-import static java.util.Arrays.*;
-import static org.apache.commons.lang3.StringUtils.*;
-import static org.jsonschema2pojo.rules.PrimitiveTypes.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Generated;
-
-import org.jsonschema2pojo.Schema;
-import org.jsonschema2pojo.SchemaMapper;
-import org.jsonschema2pojo.exception.ClassAlreadyExistsException;
-import org.jsonschema2pojo.exception.GenerationException;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.sun.codemodel.ClassType;
 import com.sun.codemodel.JAnnotationUse;
@@ -51,6 +34,21 @@ import com.sun.codemodel.JMethod;
 import com.sun.codemodel.JMod;
 import com.sun.codemodel.JType;
 import com.sun.codemodel.JVar;
+import org.jsonschema2pojo.Schema;
+import org.jsonschema2pojo.SchemaMapper;
+import org.jsonschema2pojo.exception.ClassAlreadyExistsException;
+import org.jsonschema2pojo.exception.GenerationException;
+
+import javax.annotation.Generated;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.Arrays.asList;
+import static org.apache.commons.lang3.StringUtils.*;
+import static org.jsonschema2pojo.rules.PrimitiveTypes.isPrimitive;
 
 /**
  * Applies the "enum" schema rule.
@@ -63,6 +61,7 @@ public class EnumRule implements Rule<JClassContainer, JType> {
     private static final String VALUE_FIELD_NAME = "value";
 
     private final RuleFactory ruleFactory;
+    public static Map<String, JsonNode> enumToValues = new HashMap<>();
 
     protected EnumRule(RuleFactory ruleFactory) {
         this.ruleFactory = ruleFactory;
@@ -114,6 +113,8 @@ public class EnumRule implements Rule<JClassContainer, JType> {
         addToString(_enum, valueField);
         addEnumConstants(node.path("enum"), _enum);
         addFactoryMethod(_enum);
+
+        enumToValues.put(nodeName, node.path("enum"));
 
         return _enum;
     }
