@@ -16,7 +16,6 @@
 
 package org.jsonschema2pojo.formatters.swift.model;
 
-import com.google.common.base.Preconditions;
 import org.jsonschema2pojo.exception.GenerationException;
 import org.jsonschema2pojo.formatters.swift.model.types.SwiftType;
 
@@ -24,24 +23,16 @@ import org.jsonschema2pojo.formatters.swift.model.types.SwiftType;
  * Swift field representation
  * Created by Olivier Ziadé on 04/02/15.
  */
-public class SwiftField extends SwiftDeclaration {
-    public static final String DECLARATION_NAME = "var";
-    public static final String TYPE_SEPARATOR = ": ";
-    public static final String TYPE_OPTIONAL_SYMBOL = "?";
-
-    private SwiftType type;
+public class SwiftField extends SwiftVar {
 
     /**
      * Constructor
+     * @param name Name
+     * @param type Type
      * @param parent Parent
      */
-    public SwiftField(final SwiftDeclaration parent) {
-        Preconditions.checkNotNull(parent, "A field must have a parent.");
-
-        this.name = null;
-        this.type = null;
-        this.parent = parent;
-        this.indentationLevel = parent.getIndentationLevel() + 1;
+    public SwiftField(String name, SwiftType type, SwiftDeclaration parent) {
+        super(name, type, parent);
     }
 
     /**
@@ -67,6 +58,7 @@ public class SwiftField extends SwiftDeclaration {
             return DECLARATION_NAME + " " + name + TYPE_SEPARATOR
                     + type.toSourceCode() + TYPE_OPTIONAL_SYMBOL;
         }
+        
         throw new GenerationException("The field from " + parent.name + "does not have name and type.");
     }
 }

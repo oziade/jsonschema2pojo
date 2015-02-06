@@ -48,4 +48,8 @@ public abstract class SwiftDeclaration {
     public int getIndentationLevel() {
         return indentationLevel;
     }
+
+    public String getName() {
+        return name;
+    }
 }

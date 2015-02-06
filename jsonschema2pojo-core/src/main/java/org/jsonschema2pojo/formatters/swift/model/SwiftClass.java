@@ -50,18 +50,17 @@ public class SwiftClass extends SwiftDeclaration {
 
         if (ClassType.ENUM != definedClass.getClassType()) {
             // Class
-            StringBuilderUtil.appendln(classCode, DECLARATION_NAME + " " + className + " {");
+            StringBuilderUtil.appendln(classCode, DECLARATION_NAME + " " + className + ": Mappable {");
 
             // Fields
             Map<String, JFieldVar> fields = definedClass.fields();
-            SwiftField field = new SwiftField(this);
+            SwiftMapFunction mapFunction = new SwiftMapFunction("map", this);
             for (Map.Entry<String, JFieldVar> entry : fields.entrySet()) {
                 final String key = entry.getKey();
                 if (!"additionalProperties".equals(key)) {
-                    field.setName(key);
-                    field.setType(SwiftCodeModel.parseType(entry.getValue().type()));
-
+                    SwiftField field = new SwiftField(key, SwiftCodeModel.parseType(entry.getValue().type()), this);
                     StringBuilderUtil.appendln(classCode, field.toSourceCode());
+                    mapFunction.addStatement(field);
                 }
             }
             StringBuilderUtil.appendln(classCode, "");
@@ -69,6 +68,9 @@ public class SwiftClass extends SwiftDeclaration {
             // Constructor
             SwiftConstructor defaultConstructor = new SwiftConstructor(this);
             StringBuilderUtil.appendln(classCode, defaultConstructor.toSourceCode());
+
+            // Mapper
+            StringBuilderUtil.appendln(classCode, mapFunction.toSourceCode());
             StringBuilderUtil.appendln(classCode, "}");
         } else {
             // Enum
