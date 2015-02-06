@@ -22,6 +22,7 @@ import com.sun.codemodel.JCodeModel;
 import java.io.IOException;
 
 /**
+ * Abstract class for language code model
  * Created by Olivier Ziadé on 04/02/15.
  */
 public abstract class CodeModel {
@@ -29,19 +30,35 @@ public abstract class CodeModel {
     protected final SupportedLanguage language;
     protected final JCodeModel codeModel;
 
+    /**
+     * Constructor
+     * @param codeModel Code model
+     * @param language Language
+     */
     public CodeModel(JCodeModel codeModel, SupportedLanguage language) {
         this.language = language;
         this.codeModel = codeModel;
     }
 
-
+    /**
+     * @return Code model
+     */
     public JCodeModel getCodeModel() {
         return codeModel;
     }
 
+    /**
+     * @return Language
+     */
     public SupportedLanguage getLanguage() {
         return language;
     }
 
+    /**
+     * Build the source code
+     * @param sourceWriter Source writer
+     * @param resourcesWriter Resource writer
+     * @throws IOException IOException
+     */
     public abstract void build(CodeWriter sourceWriter, CodeWriter resourcesWriter) throws IOException;
 }

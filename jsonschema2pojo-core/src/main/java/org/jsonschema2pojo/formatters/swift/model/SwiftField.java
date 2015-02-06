@@ -21,6 +21,7 @@ import org.jsonschema2pojo.exception.GenerationException;
 import org.jsonschema2pojo.formatters.swift.model.types.SwiftType;
 
 /**
+ * Swift field representation
  * Created by Olivier Ziadé on 04/02/15.
  */
 public class SwiftField extends SwiftDeclaration {
@@ -28,10 +29,12 @@ public class SwiftField extends SwiftDeclaration {
     public static final String TYPE_SEPARATOR = ": ";
     public static final String TYPE_OPTIONAL_SYMBOL = "?";
 
-    private String name;
     private SwiftType type;
-    private SwiftDeclaration parent;
 
+    /**
+     * Constructor
+     * @param parent Parent
+     */
     public SwiftField(final SwiftDeclaration parent) {
         Preconditions.checkNotNull(parent, "A field must have a parent.");
 
@@ -41,22 +44,23 @@ public class SwiftField extends SwiftDeclaration {
         this.indentationLevel = parent.getIndentationLevel() + 1;
     }
 
-    public String getName() {
-        return name;
-    }
-
+    /**
+     * @param name Name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
-    public SwiftType getType() {
-        return type;
-    }
-
+    /**
+     * @param type Type
+     */
     public void setType(SwiftType type) {
         this.type = type;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String declare() throws GenerationException {
         if (this.name != null && this.type != null) {

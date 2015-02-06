@@ -17,6 +17,7 @@
 package org.jsonschema2pojo.formatters;
 
 /**
+ * Enum for supported languages for generation
  * Created by Olivier Ziadé on 04/02/15.
  */
 public enum SupportedLanguage {

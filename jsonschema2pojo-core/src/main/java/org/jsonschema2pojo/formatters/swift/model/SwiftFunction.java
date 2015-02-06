@@ -5,16 +5,21 @@ import org.jsonschema2pojo.exception.GenerationException;
 import org.jsonschema2pojo.util.StringBuilderUtil;
 
 /**
+ * Swift function representation
  * Created by Olivier Ziadé on 05/02/15.
  */
 public class SwiftFunction extends SwiftDeclaration {
 
-    protected static String DECLARATION_NAME = "func";
-    private final String name;
+    protected String declarationName = "func";
     protected final String body;
-    private final SwiftDeclaration parent;
 
-    public SwiftFunction(String name, String body, SwiftDeclaration parent) {
+    /**
+     * Constructor
+     * @param name   Name
+     * @param body   Body
+     * @param parent Parent
+     */
+    public SwiftFunction(final String name, final String body, final SwiftDeclaration parent) {
         Preconditions.checkNotNull(parent, "A function must have a parent.");
 
         this.name = name;
@@ -23,11 +28,14 @@ public class SwiftFunction extends SwiftDeclaration {
         this.indentationLevel = parent.getIndentationLevel() + 1;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected String declare() throws GenerationException {
         if (name != null && body != null) {
             StringBuilder sourceCode = new StringBuilder();
-            StringBuilderUtil.appendln(sourceCode, DECLARATION_NAME + " " + name + "() {");
+            StringBuilderUtil.appendln(sourceCode, declarationName + " " + name + "() {");
             StringBuilderUtil.appendln(sourceCode, SwiftConstants.INDENT_SYMBOL + body);
             StringBuilderUtil.appendln(sourceCode, getIndentation() + "}");
 

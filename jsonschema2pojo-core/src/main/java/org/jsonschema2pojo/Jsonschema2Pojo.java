@@ -73,6 +73,7 @@ public class Jsonschema2Pojo {
             CodeWriter sourcesWriter = new FileCodeWriterWithEncoding(config.getTargetDirectory(), config.getOutputEncoding());
             CodeWriter resourcesWriter = new FileCodeWriterWithEncoding(config.getTargetDirectory(), config.getOutputEncoding());
             CodeModel customCodeModel = new SwiftCodeModel(codeModel, SupportedLanguage.SWIFT);
+//            CodeModel customCodeModel = new JavaCodeModel(codeModel, SupportedLanguage.JAVA);
             customCodeModel.build(sourcesWriter, resourcesWriter);
         } else {
             throw new GenerationException("Could not create or access target directory " + config.getTargetDirectory().getAbsolutePath());

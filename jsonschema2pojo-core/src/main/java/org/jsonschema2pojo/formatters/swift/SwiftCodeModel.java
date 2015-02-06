@@ -19,22 +19,31 @@ import java.io.Writer;
 import java.util.Iterator;
 
 /**
+ * Swift code model
  * Created by Olivier Ziadé on 04/02/15.
  */
 public class SwiftCodeModel extends CodeModel {
     public static final SwiftType BOOLEAN = new SwiftPrimitiveType("Bool");
     public static final SwiftType INTEGER = new SwiftPrimitiveType("Int");
 
-    public SwiftCodeModel(JCodeModel codeModel, SupportedLanguage language) {
+    /**
+     * Constructor
+     * @param codeModel Code model
+     * @param language Language
+     */
+    public SwiftCodeModel(final JCodeModel codeModel, final SupportedLanguage language) {
         super(codeModel, language);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void build(CodeWriter sourceWriter, CodeWriter resourcesWriter) throws IOException {
-        // avoid concurrent modification exception
+    public void build(final CodeWriter sourceWriter, final CodeWriter resourcesWriter) throws IOException {
         for (Iterator<JPackage> pkgIt = codeModel.packages(); pkgIt.hasNext(); ) {
             JPackage pkg = pkgIt.next();
-            // writeClasses classes
+
+            // Write classes
             for (Iterator<JDefinedClass> classIt = pkg.classes(); classIt.hasNext(); ) {
                 JDefinedClass c = classIt.next();
                 if (c.isHidden())
@@ -51,11 +60,24 @@ public class SwiftCodeModel extends CodeModel {
         resourcesWriter.close();
     }
 
-    private PrintWriter createSwiftSourceFileWriter(JPackage pkg, CodeWriter src, String className) throws IOException {
+    /**
+     * Creates the swift source file on disk
+     * @param pkg Package
+     * @param src Source writer
+     * @param className Class name
+     * @return Source writer
+     * @throws IOException IOException
+     */
+    private PrintWriter createSwiftSourceFileWriter(final JPackage pkg, final CodeWriter src, final String className) throws IOException {
         Writer bw = new BufferedWriter(src.openSource(pkg, className + ".swift"));
         return new PrintWriter(bw);
     }
 
+    /**
+     * Extract swift type from java type
+     * @param javaType Java type
+     * @return Swift type
+     */
     public static SwiftType parseType(final JType javaType) {
         SwiftType type;
         final String javaTypeName = javaType.name();
