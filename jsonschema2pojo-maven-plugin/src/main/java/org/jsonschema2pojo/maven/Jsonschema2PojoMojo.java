@@ -16,15 +16,6 @@
 
 package org.jsonschema2pojo.maven;
 
-import static org.apache.commons.lang3.StringUtils.*;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -37,7 +28,17 @@ import org.jsonschema2pojo.GenerationConfig;
 import org.jsonschema2pojo.Jsonschema2Pojo;
 import org.jsonschema2pojo.NoopAnnotator;
 import org.jsonschema2pojo.SourceType;
+import org.jsonschema2pojo.formatters.SupportedLanguage;
 import org.jsonschema2pojo.rules.RuleFactory;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * When invoked, this goal reads one or more <a
@@ -596,5 +597,11 @@ public class Jsonschema2PojoMojo extends AbstractMojo implements GenerationConfi
     @Override
     public String getClassNameSuffix() {
         return classNameSuffix;
+    }
+
+    @Override
+    public SupportedLanguage getLanguage() {
+        // TODO Add the language option
+        return null;
     }
 }

@@ -27,8 +27,9 @@ import java.io.IOException;
  * Created by Olivier Ziadé on 04/02/15.
  */
 public class JavaCodeModel extends CodeModel {
-    public JavaCodeModel(JCodeModel codeModel, SupportedLanguage language) {
-        super(codeModel, language);
+    public JavaCodeModel(JCodeModel codeModel) {
+        super(codeModel);
+        this.language = SupportedLanguage.JAVA;
     }
 
     public void build(CodeWriter sourceWriter, CodeWriter resourcesWriter) throws IOException {

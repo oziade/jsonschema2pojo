@@ -15,6 +15,8 @@
  */
 package org.jsonschema2pojo.gradle
 
+import org.jsonschema2pojo.formatters.SupportedLanguage
+
 import java.util.Map
 import org.jsonschema2pojo.AnnotationStyle
 import org.jsonschema2pojo.Annotator
@@ -123,7 +125,13 @@ public class JsonSchemaExtension implements GenerationConfig {
     classNameSuffix
   }
 
-  @Override
+    @Override
+    SupportedLanguage getLanguage() {
+        // TODO Handle language option
+        return null
+    }
+
+    @Override
   public String toString() {
     """|generateBuilders = ${generateBuilders}
        |usePrimitives = ${usePrimitives}

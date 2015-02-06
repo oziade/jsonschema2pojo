@@ -16,25 +16,25 @@
 
 package org.jsonschema2pojo.cli;
 
-import static org.apache.commons.lang3.StringUtils.*;
-
-import java.io.File;
-import java.io.FileFilter;
-import java.util.Iterator;
-import java.util.List;
-
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.converters.FileConverter;
 import org.jsonschema2pojo.AllFileFilter;
 import org.jsonschema2pojo.AnnotationStyle;
 import org.jsonschema2pojo.Annotator;
 import org.jsonschema2pojo.GenerationConfig;
 import org.jsonschema2pojo.NoopAnnotator;
 import org.jsonschema2pojo.SourceType;
+import org.jsonschema2pojo.formatters.SupportedLanguage;
 import org.jsonschema2pojo.rules.RuleFactory;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-import com.beust.jcommander.converters.FileConverter;
+import java.io.File;
+import java.io.FileFilter;
+import java.util.Iterator;
+import java.util.List;
+
+import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * Describes and parses the command line arguments supported by the
@@ -114,6 +114,9 @@ public class Arguments implements GenerationConfig {
     
     @Parameter(names = { "-x", "--class-suffix" }, description = "Initialize Set and List fields to null instead of an empty collection.")
     private String classNameSuffix = "";
+
+    @Parameter(names = { "-lang", "--language" }, required = true, description = "Generated language", converter = SupportedLanguageConverter.class)
+    private SupportedLanguage language;
 
     private static final int EXIT_OKAY = 0;
     private static final int EXIT_ERROR = 1;
@@ -267,6 +270,11 @@ public class Arguments implements GenerationConfig {
     @Override
     public String getClassNameSuffix() {
         return classNameSuffix;
+    }
+
+    @Override
+    public SupportedLanguage getLanguage() {
+        return language;
     }
 
 }

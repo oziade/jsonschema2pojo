@@ -16,6 +16,7 @@
 
 package org.jsonschema2pojo;
 
+import org.jsonschema2pojo.formatters.SupportedLanguage;
 import org.jsonschema2pojo.rules.RuleFactory;
 
 import java.io.File;
@@ -191,5 +192,10 @@ public class DefaultGenerationConfig implements GenerationConfig {
     @Override
     public String getClassNameSuffix() {
         return "";
+    }
+
+    @Override
+    public SupportedLanguage getLanguage() {
+        return SupportedLanguage.JAVA;
     }
 }

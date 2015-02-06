@@ -16,10 +16,12 @@
 
 package org.jsonschema2pojo;
 
+import org.jsonschema2pojo.formatters.SupportedLanguage;
+import org.jsonschema2pojo.rules.RuleFactory;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.util.Iterator;
-import org.jsonschema2pojo.rules.RuleFactory;
 
 /**
  * Defines the configuration options for Java type generation, including source
@@ -242,4 +244,10 @@ public interface GenerationConfig {
      * @return Whether to initialize collections with empty instance or null.
      */
     String getClassNameSuffix();
+
+    /**
+     * Gets the 'language' configuration option
+     * @return The language for code generation
+     */
+    SupportedLanguage getLanguage();
 }

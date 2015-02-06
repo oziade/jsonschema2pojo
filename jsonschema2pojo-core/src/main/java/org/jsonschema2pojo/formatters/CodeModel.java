@@ -27,16 +27,14 @@ import java.io.IOException;
  */
 public abstract class CodeModel {
 
-    protected final SupportedLanguage language;
+    protected SupportedLanguage language;
     protected final JCodeModel codeModel;
 
     /**
      * Constructor
      * @param codeModel Code model
-     * @param language Language
      */
-    public CodeModel(JCodeModel codeModel, SupportedLanguage language) {
-        this.language = language;
+    public CodeModel(JCodeModel codeModel) {
         this.codeModel = codeModel;
     }
 

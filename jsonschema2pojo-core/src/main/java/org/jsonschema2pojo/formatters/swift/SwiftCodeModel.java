@@ -29,10 +29,10 @@ public class SwiftCodeModel extends CodeModel {
     /**
      * Constructor
      * @param codeModel Code model
-     * @param language Language
      */
-    public SwiftCodeModel(final JCodeModel codeModel, final SupportedLanguage language) {
-        super(codeModel, language);
+    public SwiftCodeModel(final JCodeModel codeModel) {
+        super(codeModel);
+        this.language = SupportedLanguage.SWIFT;
     }
 
     /**

@@ -21,5 +21,19 @@ package org.jsonschema2pojo.formatters;
  * Created by Olivier Ziadé on 04/02/15.
  */
 public enum SupportedLanguage {
-    JAVA, SWIFT
+    JAVA, SWIFT;
+
+    /**
+     * @param code String value
+     * @return The corresponding enum
+     */
+    public static SupportedLanguage fromString(String code) {
+        for (SupportedLanguage language : SupportedLanguage.values()) {
+            if (language.toString().equalsIgnoreCase(code)) {
+                return language;
+            }
+        }
+
+        return null;
+    }
 }

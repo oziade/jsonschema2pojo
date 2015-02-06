@@ -16,7 +16,19 @@
 
 package org.jsonschema2pojo.ant;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.Task;
+import org.apache.tools.ant.types.Path;
+import org.apache.tools.ant.types.Reference;
+import org.jsonschema2pojo.AllFileFilter;
+import org.jsonschema2pojo.AnnotationStyle;
+import org.jsonschema2pojo.Annotator;
+import org.jsonschema2pojo.GenerationConfig;
+import org.jsonschema2pojo.Jsonschema2Pojo;
+import org.jsonschema2pojo.NoopAnnotator;
+import org.jsonschema2pojo.SourceType;
+import org.jsonschema2pojo.formatters.SupportedLanguage;
+import org.jsonschema2pojo.rules.RuleFactory;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -31,18 +43,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Task;
-import org.apache.tools.ant.types.Path;
-import org.apache.tools.ant.types.Reference;
-import org.jsonschema2pojo.AllFileFilter;
-import org.jsonschema2pojo.AnnotationStyle;
-import org.jsonschema2pojo.Annotator;
-import org.jsonschema2pojo.GenerationConfig;
-import org.jsonschema2pojo.Jsonschema2Pojo;
-import org.jsonschema2pojo.NoopAnnotator;
-import org.jsonschema2pojo.SourceType;
-import org.jsonschema2pojo.rules.RuleFactory;
+import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * When invoked, this task reads one or more <a
@@ -583,6 +585,12 @@ public class Jsonschema2PojoTask extends Task implements GenerationConfig {
     @Override
     public String getClassNameSuffix() {
         return classNameSuffix;
+    }
+
+    @Override
+    public SupportedLanguage getLanguage() {
+        // TODO Handle language option
+        return null;
     }
 
 }

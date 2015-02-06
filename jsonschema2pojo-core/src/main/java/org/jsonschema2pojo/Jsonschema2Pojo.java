@@ -20,7 +20,7 @@ import com.sun.codemodel.CodeWriter;
 import com.sun.codemodel.JCodeModel;
 import org.jsonschema2pojo.exception.GenerationException;
 import org.jsonschema2pojo.formatters.CodeModel;
-import org.jsonschema2pojo.formatters.SupportedLanguage;
+import org.jsonschema2pojo.formatters.java.JavaCodeModel;
 import org.jsonschema2pojo.formatters.swift.SwiftCodeModel;
 import org.jsonschema2pojo.rules.RuleFactory;
 
@@ -72,9 +72,17 @@ public class Jsonschema2Pojo {
         if (config.getTargetDirectory().exists() || config.getTargetDirectory().mkdirs()) {
             CodeWriter sourcesWriter = new FileCodeWriterWithEncoding(config.getTargetDirectory(), config.getOutputEncoding());
             CodeWriter resourcesWriter = new FileCodeWriterWithEncoding(config.getTargetDirectory(), config.getOutputEncoding());
-            CodeModel customCodeModel = new SwiftCodeModel(codeModel, SupportedLanguage.SWIFT);
-//            CodeModel customCodeModel = new JavaCodeModel(codeModel, SupportedLanguage.JAVA);
-            customCodeModel.build(sourcesWriter, resourcesWriter);
+            CodeModel model;
+
+            switch (config.getLanguage()) {
+                case SWIFT:
+                    model = new SwiftCodeModel(codeModel);
+                    break;
+                default:
+                    model = new JavaCodeModel(codeModel);
+            }
+
+            model.build(sourcesWriter, resourcesWriter);
         } else {
             throw new GenerationException("Could not create or access target directory " + config.getTargetDirectory().getAbsolutePath());
         }
