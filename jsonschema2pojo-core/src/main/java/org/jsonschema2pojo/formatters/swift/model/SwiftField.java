@@ -24,7 +24,9 @@ import org.jsonschema2pojo.formatters.swift.model.types.SwiftType;
  * Created by Olivier Ziadé on 04/02/15.
  */
 public class SwiftField extends SwiftVar {
-
+    
+    private final String associatedName;
+    
     /**
      * Constructor
      * @param name Name
@@ -33,6 +35,8 @@ public class SwiftField extends SwiftVar {
      */
     public SwiftField(String name, SwiftType type, SwiftDeclaration parent) {
         super(name, type, parent);
+        final SwiftStopWords stopWord = SwiftStopWords.fromString(this.name);
+        this.associatedName = stopWord == null ? this.name : stopWord.getAssociatedName();
     }
 
     /**
@@ -55,10 +59,19 @@ public class SwiftField extends SwiftVar {
     @Override
     protected String declare() throws GenerationException {
         if (this.name != null && this.type != null) {
-            return DECLARATION_NAME + " " + name + TYPE_SEPARATOR
+            return DECLARATION_NAME + " " + getName()  + TYPE_SEPARATOR
                     + type.toSourceCode() + TYPE_OPTIONAL_SYMBOL;
         }
         
         throw new GenerationException("The field from " + parent.name + "does not have name and type.");
+    }
+
+    @Override
+    public String getName() {
+        return this.associatedName;
+    }
+    
+    public String getRealName() {
+        return this.name;
     }
 }
