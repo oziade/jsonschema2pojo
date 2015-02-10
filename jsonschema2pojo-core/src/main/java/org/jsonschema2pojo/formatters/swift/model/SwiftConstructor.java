@@ -33,7 +33,7 @@ public class SwiftConstructor extends SwiftFunction {
      * @param parent Parent
      */
     public SwiftConstructor(final SwiftDeclaration parent) {
-        super(CONSTRUCTOR_NAME, new ArrayList<SwiftArgument>(), "", parent);
+        super(CONSTRUCTOR_NAME, new ArrayList<SwiftArgument>(), "", false, parent);
 
         Preconditions.checkNotNull(parent, "An constructor must have a parent.");
         this.declarationName = SwiftConstants.REQUIRED;

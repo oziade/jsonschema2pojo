@@ -68,11 +68,16 @@ public class SwiftClass extends SwiftDeclaration {
 
         if (ClassType.ENUM != definedClass.getClassType()) {
             // Class
-            StringBuilderUtil.appendln(classCode, DECLARATION_NAME + " " + className + ": Mappable {");
+            String declarationName = DECLARATION_NAME + " " + className + ": ";
+            final boolean hasSuperClass = hasCustomSuperClass();
+            if (hasSuperClass) {
+                declarationName += definedClass._extends().name() + ", ";
+            }
+            StringBuilderUtil.appendln(classCode, declarationName + "Mappable {");
 
             // Fields
             Map<String, JFieldVar> fields = definedClass.fields();
-            SwiftMapFunction mapFunction = new SwiftMapFunction("map", this);
+            SwiftMapFunction mapFunction = new SwiftMapFunction("map", hasSuperClass, this);
             for (Map.Entry<String, JFieldVar> entry : fields.entrySet()) {
                 final String key = entry.getKey();
                 if (!"additionalProperties".equals(key)) {
@@ -108,5 +113,13 @@ public class SwiftClass extends SwiftDeclaration {
         }
 
         return classCode.toString();
+    }
+
+    private boolean hasCustomSuperClass() {
+        return !"Object".equals(definedClass._extends().name());
+    }
+
+    public JDefinedClass getDefinedClass() {
+        return definedClass;
     }
 }

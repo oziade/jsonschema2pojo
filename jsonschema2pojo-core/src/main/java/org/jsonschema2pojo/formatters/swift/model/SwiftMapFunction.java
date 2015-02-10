@@ -16,25 +16,41 @@
 
 package org.jsonschema2pojo.formatters.swift.model;
 
+import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JFieldVar;
+import org.jsonschema2pojo.exception.GenerationException;
+import org.jsonschema2pojo.formatters.swift.SwiftCodeModel;
 import org.jsonschema2pojo.formatters.swift.model.types.SwiftPrimitiveType;
+import org.jsonschema2pojo.util.StringBuilderUtil;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Swift map function (for ObjectMapper)
  * Created by Olivier Ziadé on 06/02/15.
  */
 public class SwiftMapFunction extends SwiftFunction {
-    
+
+    private JDefinedClass superClass;
 
     /**
      * Constructor
-     * @param name   Name
-     * @param parent Parent
+     * @param name     Name
+     * @param override Does this method override a superclass method ?
+     * @param parent   Parent
      */
-    public SwiftMapFunction(final String name, final SwiftDeclaration parent) {
-        super(name, new ArrayList<SwiftArgument>(), "",  parent);
+    public SwiftMapFunction(final String name, final boolean override, final SwiftClass parent) {
+        super(name, new ArrayList<SwiftArgument>(), "", override, parent);
         this.arguments.add(new SwiftArgument("map", new SwiftPrimitiveType("Map"), this));
+        this.superClass = null;
+
+        final JDefinedClass definedClass = parent.getDefinedClass();
+        if (override && definedClass != null) {
+            // Hack for giving access to super class fields to generate map function
+            // TODO Find another way to do this, because it's evil
+            this.superClass = (JDefinedClass) definedClass._extends();
+        }
     }
 
     /**
@@ -42,6 +58,40 @@ public class SwiftMapFunction extends SwiftFunction {
      * @param field Swift field
      */
     public void addStatement(SwiftField field) {
-        this.body +=  getIndentation(indentationLevel + 2) + field.getName() + " <= " + name + "[\"" + field.getRealName() + "\"]" + String.format("%n");
+        this.body += getIndentation(indentationLevel + 2) + field.getName() + " <= " + name + "[\"" + field.getRealName() + "\"]" + String.format("%n");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String declare() throws GenerationException {
+        if (name != null && body != null) {
+            StringBuilder sourceCode = new StringBuilder();
+            if (override) {
+                sourceCode.append("override ");
+            }
+
+            StringBuilderUtil.appendln(sourceCode, declarationName + " " + name + "(" + formatArguments() + ") {");
+
+            if (override) {
+                for (Map.Entry<String, JFieldVar> entry : superClass.fields().entrySet()) {
+                    final String key = entry.getKey();
+                    if (!"additionalProperties".equals(key)) {
+                        SwiftField field = new SwiftField(key, SwiftCodeModel.parseType(entry.getValue().type()), this);
+                        addStatement(field);
+                    }
+                }
+            }
+
+            if (!body.isEmpty()) {
+                StringBuilderUtil.appendln(sourceCode, body);
+            }
+            StringBuilderUtil.appendln(sourceCode, getIndentation() + "}");
+
+            return sourceCode.toString();
+        }
+
+        throw new GenerationException("The function from " + parent.name + "does not have name and type.");
     }
 }
