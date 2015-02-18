@@ -61,7 +61,7 @@ public class SwiftMapFunction extends SwiftFunction {
     public void addStatement(SwiftField field) {
         String statement;
         if(SwiftDate.DATE_TYPE_NAME.equals(field.getType().toSourceCode())) {
-            statement = getIndentation(indentationLevel + 2) + field.getName() + " <= (" + name + "[\"" + field.getRealName() + "\"], ISO8601DateTransform<"+ field.getType().toSourceCode() + ", String>())" + String.format("%n");
+            statement = getIndentation(indentationLevel + 2) + field.getName() + " <= (" + name + "[\"" + field.getRealName() + "\"], ISO8601UTCDateTransform<"+ field.getType().toSourceCode() + ", String>())" + String.format("%n");
         } else {
             statement = getIndentation(indentationLevel + 2) + field.getName() + " <= " + name + "[\"" + field.getRealName() + "\"]" + String.format("%n");
         }
