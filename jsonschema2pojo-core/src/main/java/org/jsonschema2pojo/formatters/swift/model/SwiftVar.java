@@ -42,4 +42,8 @@ public abstract class SwiftVar extends SwiftDeclaration {
         this.parent = parent;
         this.indentationLevel = parent.getIndentationLevel() + 1;
     }
+
+    public SwiftType getType() {
+        return type;
+    }
 }

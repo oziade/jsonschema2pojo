@@ -25,6 +25,7 @@ import org.jsonschema2pojo.formatters.CodeModel;
 import org.jsonschema2pojo.formatters.SupportedLanguage;
 import org.jsonschema2pojo.formatters.swift.model.SwiftClass;
 import org.jsonschema2pojo.formatters.swift.model.types.SwiftArrayType;
+import org.jsonschema2pojo.formatters.swift.model.types.SwiftDate;
 import org.jsonschema2pojo.formatters.swift.model.types.SwiftPrimitiveType;
 import org.jsonschema2pojo.formatters.swift.model.types.SwiftType;
 
@@ -103,6 +104,8 @@ public class SwiftCodeModel extends CodeModel {
             type = SwiftCodeModel.BOOLEAN;
         } else if ("Double".equals(javaTypeName)) {
             type = new SwiftPrimitiveType(javaTypeName);
+        } else if ("Date".equals(javaTypeName)) {
+            type = new SwiftDate(javaTypeName);
         } else if (javaTypeName.startsWith("List")) {
             type = new SwiftArrayType(javaTypeName,
                     javaTypeName.substring(javaTypeName.indexOf("<") + 1, javaTypeName.lastIndexOf(">")));

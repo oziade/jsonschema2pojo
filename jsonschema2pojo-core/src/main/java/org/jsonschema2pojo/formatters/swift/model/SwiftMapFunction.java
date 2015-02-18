@@ -20,6 +20,7 @@ import com.sun.codemodel.JDefinedClass;
 import com.sun.codemodel.JFieldVar;
 import org.jsonschema2pojo.exception.GenerationException;
 import org.jsonschema2pojo.formatters.swift.SwiftCodeModel;
+import org.jsonschema2pojo.formatters.swift.model.types.SwiftDate;
 import org.jsonschema2pojo.formatters.swift.model.types.SwiftPrimitiveType;
 import org.jsonschema2pojo.util.StringBuilderUtil;
 
@@ -58,7 +59,14 @@ public class SwiftMapFunction extends SwiftFunction {
      * @param field Swift field
      */
     public void addStatement(SwiftField field) {
-        this.body += getIndentation(indentationLevel + 2) + field.getName() + " <= " + name + "[\"" + field.getRealName() + "\"]" + String.format("%n");
+        String statement;
+        if(SwiftDate.DATE_TYPE_NAME.equals(field.getType().toSourceCode())) {
+            statement = getIndentation(indentationLevel + 2) + field.getName() + " <= (" + name + "[\"" + field.getRealName() + "\"], ISO8601DateTransform<"+ field.getType().toSourceCode() + ", String>())" + String.format("%n");
+        } else {
+            statement = getIndentation(indentationLevel + 2) + field.getName() + " <= " + name + "[\"" + field.getRealName() + "\"]" + String.format("%n");
+        }
+         
+        this.body += statement;
     }
 
     /**
